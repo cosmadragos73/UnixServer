@@ -21,6 +21,7 @@
 #include <curses.h>
 #include <locale.h>
 #include "ncurses-menu.h"
+#include "client.h"
 /* Prints typical menus that you might see in games */
 int
 main (int argc, char *argv[])
@@ -55,6 +56,9 @@ main (int argc, char *argv[])
             {
                 menu_ret2 = print_menu (6, 22, 4, 15,
                                         "SELECT SLOT", alts2, 1);
+                if(menu_ret2 == 1){
+                    sendFile();
+                }
             }
             while (menu_ret2 != 4);                 /* You can't start an actual game.  */
             getch();
