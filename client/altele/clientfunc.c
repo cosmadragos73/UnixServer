@@ -5,6 +5,7 @@
 #include <string.h> 
 #include <sys/socket.h> 
 #include <sys/types.h> 
+:exit
 #include <unistd.h> 
 #include "client.h"
 
@@ -37,7 +38,9 @@ int recvFile(char* buf, int s)
     } 
     return 0; 
 }
+int createConnection(sockaddr_in *addr_con) {
 
+}
 void sendFile() {
     struct sockaddr_in addr_con; 
     int addrlen = sizeof(addr_con); 
