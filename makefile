@@ -1,19 +1,21 @@
 
 # Makefile for echo client and server
 #
-EXE 	=	./client/client ./client/client2 ./server/server
-
-SRC 	=	./client/client.c ./client/client2.c ./server/server.c
-
+#EXE 	=	./client/udp/client ./server/udp/server ./client/tcp/client ./server/tcp/server
+EXE 	= ./server/udp/server ./client/udp/client
+ 
+#SRC 	=	./client/udp/client.c ./server/udp/server.c ./client/tcp/client.c ./server/tcp/server.c
+SRC 	= ./server/udp/server.c ./client/udp/client.c
+	
 FLAGS	=	-Wall
 
-all:		$(SRC) socks.o socks.h errlib.o errlib.h
+all:		$(SRC) utils/socks.o utils/socks.h errlib.o utils/errlib.h
 		for f in $(EXE); do (cc $(FLAGS) -o $$f $$f.c socks.o errlib.o); done
 
-sockwrap.o:	socks.c socks.h
+sockwrap.o:	utils/socks.c utils/socks.h
 		cc $(FLAGS) -c -o socks.o socks.c
 
-errlib.o:	errlib.c errlib.h
+errlib.o:	utils/errlib.c utils/errlib.h
 		cc $(FLAGS) -c -o errlib.o errlib.c
 
 clean:
