@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 import os
-
 import curses
 from curses import panel
-#from subprocess import call
 from subprocess import Popen, PIPE, call
 
-path_tcp_client = os.path.realpath("./client/tcp/Server")
-path_tcp_server = os.path.realpath("./server/tcp/Client")
-path_udp_client = os.path.abspath("./client/udp/Client")
+path_tcp_client = os.path.abspath("./client/tcp/Client")
+path_tcp_server = os.path.abspath("./server/tcp/Server")
+
+path_tcp2_client = os.path.abspath("./client/tcp2/Client")
+path_tcp2_server = os.path.abspath("./server/tcp2/Server")
+
 path_udp_server = os.path.abspath("./server/udp/Server")
+path_udp_client = os.path.abspath("./client/udp/Client")
+
+path_udp_tcp_server = os.path.abspath("./server/udptcp/Server")
+path_udp_tcp_client = os.path.abspath("./client/udptcp/Client")
+
 port = "6666"
 ip = "127.0.0.1"
 
@@ -82,7 +88,9 @@ class MyApp(object):
         submenu_udp = Menu(submenu_udp,self.screen)
        
         submenu_tcp = [
-            ('Start Server', self.run_tcp_server),
+            ('Start Server with file transfer', self.run_tcp_server_f),
+            ('Start Client with file transfer', self.run_tcp_client_f),
+            ('Start Server',self.run_tcp_server),
             ('Start Client', self.run_tcp_client),
             ('About', curses.beep)
         ]
@@ -93,11 +101,17 @@ class MyApp(object):
                 ('flash', curses.flash)
                 ]
         submenu = Menu(submenu_items, self.screen)
-
+        
+        submenu_udp_tcp = [
+                ('UDP/TCP Server', self.run_udp_tcp_s),
+                ('UDP/TCP Client', self.run_udp_tcp_c)
+        ]
+        submenu_udp_tcp = Menu(submenu_udp_tcp, self.screen)
         main_menu_items = [
                 ('About', submenu.display),
                 ('TCP', submenu_tcp.display),
-                ('UDP', submenu_udp.display)
+                ('UDP', submenu_udp.display),
+                ('UDP and TCP', submenu_udp_tcp.display)
                 ]
         main_menu = Menu(main_menu_items, self.screen)
         main_menu.display()
@@ -116,18 +130,31 @@ class MyApp(object):
 
 
     def run_tcp_server(self):
-       self.run_server(path_tcp_server)
+       self.run_server(path_tcp2_server)
     def run_udp_server(self):
        self.run_server(path_udp_server)
+
+    def run_tcp_client_f(self):
+        self.run_tcp_client_file(path_tcp_client)
+    def run_tcp_server_f(self):
+        self.run_tcp_server_file(path_tcp_server)
     def run_tcp_client(self):
-       self.run_client(path_tcp_client)
+        self.run_client(path_tcp2_client)
+    def run_tcp_server(self):
+        self.run_server(path_tcp2_server)
+   
     def run_udp_client(self):
        self.run_client(path_udp_client)
-   
+    def run_udp_tcp_s(self):
+       self.run_udp_tcp_client(path_udp_tcp_server)
+    def run_udp_tcp_c(self):
+      self.run_udp_tcp_client(path_udp_tcp_client)
+    
     def run_server(self, program):
        self.exit_curses()
        try:
             try:
+               print program
                call([program, port])
             except ValueError, e:
                  print "Error opening file %s" % e
@@ -138,6 +165,59 @@ class MyApp(object):
            self.enter_curses()
   
     def run_client(self, program):
+        self.exit_curses()
+        try:
+            try:
+                call([program, ip, port])
+            except ValueError, e:
+                print "Error opening file %s" % e
+                return
+            except KeyboardInterrupt:
+                pass
+        finally:
+            self.enter_curses()
+    def run_tcp_server_file(self, program):
+        self.exit_curses()
+        try:
+            try:
+                file = 'troll.mp3'
+                call([program, ip,port,file])
+            except ValueError, e:
+                print "Error opening file %s" % e
+                return
+            except KeyboardInterrupt:
+                pass
+        finally:
+            self.enter_curses()
+
+
+    def run_tcp_client_file(self, program):
+        self.exit_curses()
+        try:
+            try:
+                file = 'troll.mp3'
+                call([program, ip,port,file])
+            except ValueError, e:
+                print "Error opening file %s" % e
+                return
+            except KeyboardInterrupt:
+                pass
+        finally:
+            self.enter_curses()
+
+    def run_udp_tcp_server(self, program):
+        self.exit_curses()
+        try:
+            try:
+                call([program, ip,port])
+            except ValueError, e:
+                print "Error opening file %s" % e
+                return
+            except KeyboardInterrupt:
+                pass
+        finally:
+            self.enter_curses()
+    def run_udp_tcp_client(self, program):
         self.exit_curses()
         try:
             try:
