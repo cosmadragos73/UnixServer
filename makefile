@@ -1,16 +1,55 @@
 
 # Makefile for echo client and server
 #
-#EXE 	=	./client/udp/client ./server/udp/server ./client/tcp/client ./server/tcp/server
-EXE 	= ./server/udp/server ./client/udp/client
- 
-#SRC 	=	./client/udp/client.c ./server/udp/server.c ./client/tcp/client.c ./server/tcp/server.c
-SRC 	= ./server/udp/server.c ./client/udp/client.c
-	
+#EXE 	= 
+#./server/udp/Server ./server/udptcp/Server ./server/tcp/Server ./server/tcp2/Server
+#./client/udp/Client ./client/udptcp/Client ./client/tcp/Client ./client/tcp2/Client
+EXE_SERVER_TCP = ./server/tcp/Server  #./server/tcp2/Server
+EXE_SERVER_UDP = ./server/udp/Server  
+
+EXE_CLIENT_UDP = ./client/udp/Client 
+EXE_CLIENT_TCP = ./client/tcp/Client #./client/tcp2/Client
+
+EXE_CLIENT_TCP_UDP = ./client/udptcp/Client
+EXE_SERVER_TCP_UDP = ./server/udptcp/Server
+
+SRC_SERVER_UDP = ./server/udp/Server.c
+SRC_CLIENT_UDP = ./client/udp/Client.c 
+
+SRC_SERVER_TCP = ./server/tcp/Server.c #./server/tcp2/Server.c
+SRC_CLIENT_TCP = ./client/tcp/Client.c #./client/tcp2/Client.c
+
+SRC_SERVER_TCP_UDP = ./server/udptcp/Server.c
+SRC_CLIENT_TCP_UDP = ./client/udptcp/Client.c 
+
 FLAGS	=	-Wall
 
-all:		$(SRC) utils/socks.o utils/socks.h errlib.o utils/errlib.h
-		for f in $(EXE); do (cc $(FLAGS) -o $$f $$f.c socks.o errlib.o); done
+client_tcp: $(SRC_CLIENT_TCP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+		for f in $(EXE_CLIENT_TCP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+client_udp: $(SRC_CLIENT_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+		for f in $(EXE_CLIENT_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+client_udp_tcp:$(SRC_CLIENT_TCP_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+		for f in $(EXE_CLIENT_TCP_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+
+server_tcp:$(SRC_SERVER_TCP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+		for f in $(EXE_SERVER_TCP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+server_udp:$(SRC_SERVER_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+		for f in $(EXE_SERVER_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+server_udp_tcp:$(SRC_SERVER_TCP_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+		for f in $(EXE_SERVER_TCP_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+#client: $(SRC_CLIENT) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+#		for f in $(EXE_CLIENT); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+
+#server: $(SRC_SERVER) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+#		for f in $(EXE_SERVER); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+#all:		$(SRC) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
+#		for f in $(EXE); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
 
 sockwrap.o:	utils/socks.c utils/socks.h
 		cc $(FLAGS) -c -o socks.o socks.c

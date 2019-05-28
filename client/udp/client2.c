@@ -13,8 +13,8 @@
 #include     <stdlib.h>
 #include     <string.h>
 #include     <inttypes.h>
-#include     "../errlib.h"
-#include     "../socks.h"
+#include    "../../utils/errlib.h"
+#include    "../../utils/socks.h"
 
 #define BUFLEN 128  		/* BUFFER LENGTH */
 #define TIMEOUT 15  		/* TIMEOUT (seconds) */

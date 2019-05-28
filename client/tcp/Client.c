@@ -4,8 +4,8 @@
 #include    <string.h>
 #include    <sys/stat.h>
 #include    <inttypes.h>
-#include    "../errlib.h"
-#include    "../sockwrap.h"
+#include    "../../utils/errlib.h"
+#include    "../../utils/socks.h"
 #include    <unistd.h>
 #include    <time.h>
 

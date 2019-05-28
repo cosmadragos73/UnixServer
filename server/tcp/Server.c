@@ -5,8 +5,8 @@
 #include    <inttypes.h>
 #include    <sys/stat.h>
 #include    <sys/wait.h>
-#include    "../errlib.h"
-#include    "../sockwrap.h"
+#include    "../../utils/errlib.h"
+#include    "../../utils/socks.h"
 
 #define BUFLEN	1024 			/* BUFFER LENGTH */
 #define maxConn 1; 			    /* fix #max of connections */
