@@ -180,8 +180,7 @@ class MyApp(object):
         self.exit_curses()
         try:
             try:
-                file = 'troll.mp3'
-                call([program, ip,port,file])
+                call([program,port])
             except ValueError, e:
                 print "Error opening file %s" % e
                 return
@@ -195,8 +194,7 @@ class MyApp(object):
         self.exit_curses()
         try:
             try:
-                file = 'troll.mp3'
-                call([program, ip,port,file])
+                call([program, ip,port])
             except ValueError, e:
                 print "Error opening file %s" % e
                 return
