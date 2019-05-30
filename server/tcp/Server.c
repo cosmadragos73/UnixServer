@@ -77,7 +77,7 @@ int setup_data_connection(int *fd, char *client_ip, int client_port, int server_
 	struct sockaddr_in cliaddr, tempaddr;
 
 	if ( (*fd = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-    	perror("socket error");
+    	perror("eroare la socket");
     	return -1;
     }
 
@@ -99,12 +99,12 @@ int setup_data_connection(int *fd, char *client_ip, int client_port, int server_
     cliaddr.sin_family = AF_INET;
     cliaddr.sin_port   = htons(client_port);
     if (inet_pton(AF_INET, client_ip, &cliaddr.sin_addr) <= 0){
-    	perror("inet_pton error");
+    	perror("eroare inet_pton");
     	return -1;
     }
 
     if (connect(*fd, (struct sockaddr *) &cliaddr, sizeof(cliaddr)) < 0){
-    	perror("connect error");
+    	perror("eroare la conexiune");
     	return -1;
     }
 
@@ -145,9 +145,9 @@ int do_list(int controlfd, int datafd, char *input){
 	bzero(filelist, (int)sizeof(filelist));
 
 	if(get_filename(input, filelist) > 0){
-		printf("Filelist Detected\n");
+		printf("Fisiere detectate\n");
 		sprintf(str, "ls %s", filelist);
-		printf("Filelist: %s\n", filelist);
+		printf("Lista fisiere: %s\n", filelist);
 		trim(filelist);
 		//verify that given input is valid
 		/*struct stat statbuf;
@@ -207,7 +207,7 @@ int do_retr(int controlfd, int datafd, char *input){
     		return -1;
 		}
 	}else{
-		printf("Filename Not Detected\n");
+		printf("Numele nu a fost detectat\n");
 		sprintf(sendline, "450 Requested file action not taken.\nFilename Not Detected\n");
     	write(controlfd, sendline, strlen(sendline));
 		return -1;
@@ -246,7 +246,7 @@ int do_stor(int controlfd, int datafd, char *input){
 	if(get_filename(input, filename) > 0){
 		sprintf(str, "%s-out", filename);
 	}else{
-		printf("Filename Not Detected\n");
+		printf("Numele fisierului nu a fost detectat\n");
 		sprintf(sendline, "450 Requested file action not taken.\n");
     	write(controlfd, sendline, strlen(sendline));
 		return -1;
@@ -255,7 +255,7 @@ int do_stor(int controlfd, int datafd, char *input){
 	sprintf(temp1, "%s-out", filename);
 	FILE *fp;
     if((fp = fopen(temp1, "w")) == NULL){
-        perror("file error");
+        perror("eroare la fisier");
         return -1;
     }
 
@@ -281,8 +281,8 @@ int main(int argc, char **argv){
 	pid_t pid;
 
 	if(argc != 2){
-		printf("Invalid Number of Arguments...\n");
-		printf("Usage: ./ftpserver <listen-port>\n");
+		printf("Numarul de argumente nu este corect...\n");
+		printf("Utilizare: ./server <port>\n");
 		exit(-1);
 	}
 	
@@ -301,7 +301,7 @@ int main(int argc, char **argv){
 
 	while(1){
 		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
-		printf("New Client Detected...\n");
+		printf("Am detectat un client nou...\n");
 		//child process---------------------------------------------------------------
 		if((pid = fork()) == 0){
 			close(listenfd);
@@ -323,7 +323,7 @@ int main(int argc, char **argv){
     			}
     			printf("*****************\n%s \n", recvline);
                 if(strcmp(recvline, "QUIT") == 0){
-                    printf("Quitting...\n");
+                    printf("Ies...\n");
                     char goodbye[1024];
                     sprintf(goodbye,"221 Goodbye");
                     write(connfd, goodbye, strlen(goodbye));
@@ -361,7 +361,7 @@ int main(int argc, char **argv){
     			
 
 			}
-    		printf("Exiting Child Process...\n");
+    		printf("Am iesit din procesul copil...\n");
     		close(connfd);
     		_exit(1);
 		}

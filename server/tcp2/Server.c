@@ -47,13 +47,13 @@ int main(int argc, char *argv[])
 
 	/* check if the caller received the right # of parameters */
     if (argc != 2) {
-        printf("Usage: %s <port number>\n", prog_name);
+        printf("Folosire: %s <port>\n", prog_name);
         exit(1);
     }
 
     /* get server port number */
     if (sscanf(argv[1], "%" SCNu16, &lport_h)!=1)
-        err_sys("Invalid port number");
+        err_sys("Portul nu este valid");
     lport_n = htons(lport_h);
     
     /* create the socket */ 
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         if((childpid=fork())<0) 
         { 
 			/* fork() return -1 to the parent if error accours in creating the process */
-            printf("Error: fork() failed");
+            printf("Eroare: fork() nu a reusit");
             close(s);
         }
         else if (childpid > 0)
@@ -121,29 +121,29 @@ int main(int argc, char *argv[])
 void server_service(int socket){ 
 	size_t len;
 	
-	printf("Connection from %d accepted... Sending regards\r\n",socket);
-	strcpy(buf, "HELLO_CLIENT!");
+	printf(" Conexiunea de la %d a fost acceptata... Trimit un mesaj de intampinare \r\n",socket);
+	strcpy(buf, "Ceau_CLIENT!");
 
 	len = strlen(buf);
 	if(writen(socket, buf, len) != len)
 	{
-	    printf("Write error\n");
+	    printf("Eroare la scriere\n");
 	    return;
 	}
 
-	printf("waiting for echo messages...\n");
+	printf("astept mesajul de la server...\n");
 	while((len=recv(socket, rbuf, BUFLEN, 0))>0)
 	{
 		rbuf[len]='\0';
 		if(strcmp(rbuf,"CLOSE")==0)
 		{
-			printf("Client Requested to close the connection! Closing...\n");
+			printf("Clientul a cerut intreruperea conexiunii! Inchid...\n");
 			return;
 		}
-		printf("Received message from socket %03u : [%s]\n", socket, rbuf);
+		printf("Am primit mesaj de la socketul: %03u : [%s]\n", socket, rbuf);
 	}
 	
-	printf("Read error/Connection closed\n");
+	printf("Eroare la citire/Inchid conexiunea\n");
 }
 
 /* procedure for sending the "err" message to the client
@@ -168,7 +168,7 @@ void zombie_handler()
 {
     //wait all child termination
     while(waitpid((pid_t)(-1),0,WNOHANG)>0){}
-    printf("(!!)I'm killing the zombie!\n");
+    printf("(!!)Inchid procesul zombie!\n");
 }
 
 /* Gets a line of text from standard input after having printed a prompt string 

@@ -43,19 +43,19 @@ int main(int argc, char *argv[])
     prog_name = argv[0];
 
     if (argc != 2) {
-		printf("Usage: %s <port number>\n", prog_name);
+		printf("Folosire: %s <port>\n", prog_name);
 		exit(1);
     }
 
     /* get server port number */
     if (sscanf(argv[1], "%" SCNu16, &lport_h)!=1)
-    	err_sys("Invalid port number");
+    	err_sys("Portul nu este corect");
     lport_n = htons(lport_h);
 
     /* create the socket */
-    printf("creating socket\n");
+    printf(" creez socketul \n");
     s = Socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    printf("done, socket number %u\n",s);
+    printf("gata, socket nr:  %u\n",s);
 
     /* bind the socket to all local IP addresses */
     bzero(&saddr, sizeof(saddr));

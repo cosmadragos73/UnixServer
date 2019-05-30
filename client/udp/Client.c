@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
      * lets store 'em, but before, we check if the minimum of them are reached */    
     if(argc < 3)
     {
-        printf("Usage: %s <server_addr> <port number>\n", prog_name); 
+        printf("Folosire: %s <server-ip> <port number>\n", prog_name); 
         exit(1);
     } 
 

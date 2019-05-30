@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
      * lets store 'em, but before, we check if the minimum of them are reached */    
     if(argc < 3)
     {
-        printf("Usage: %s <server_addr> <port number>\n", prog_name); 
+        printf("Folosire: %s <server-ip> <port number>\n", prog_name); 
         exit(1);
     } 
     
@@ -56,17 +56,17 @@ int main(int argc, char *argv[])
      /* get ip_addr */
     result = inet_aton(argv[1], &sIPaddr);                                              
     if (!result)
-	   err_quit("Invalid address");
+	   err_quit("Adresa nu este valida");
 
 	/* get port */
     if (sscanf(argv[2], "%" SCNu16, &tport_h)!=1)
-	   err_quit("Invalid port number");
+	   err_quit("Portul nu este corect");
     tport_n = htons(tport_h);       //htons convert to byte the port
 
     /* create the socket */
-    printf("Creating socket\n");
+    printf("Creez socketul\n");
     s = Socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    printf("done. Socket fd number: %d\n",s);
+    printf("gata. Socket fd: %d\n",s);
 
     /* prepare address structure */
     bzero(&saddr, sizeof(saddr));
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     saddr.sin_addr   = sIPaddr;
 
     /* connect */
-    showAddr("Connecting to target address", &saddr);
+    showAddr("Ma conectez la adresa:", &saddr);
     Connect(s, (struct sockaddr *) &saddr, sizeof(saddr));
     printf("done.\n");
 
@@ -111,33 +111,32 @@ int mygetline(char *line, size_t maxline, char *prompt)
 void client_service(int socket)
 {
 	int n;
-	printf("waiting for the message from the server...\n\r");
-	
+	printf("astept mesajul de la server...\n\r");
 	n=recv(socket, rbuf, BUFLEN-1, 0);
 	if (n < 0)
 	{
-		printf("Error: Read error\n");
+		printf("Eroare: Eroare la citire\n");
 		return;
 	}
 	else if (n==0)
 	{
-		printf("Error: Server shut-down during transfering, data will be broken.\n");
+		printf("Eroare:Conexiunea cu serverul a fost inchisa in timpul transferului, datele sunt corupte\n");
 		return;
 	}
 	else
 	{
-		printf("Received message from socket %03u : [%s]\n", socket, rbuf);
+		printf("Am primit mesaj de la socketul %03u : [%s]\n", socket, rbuf);
 	}
 	
 	while(!(strcmp(buf,"CLOSE")==0))
     {
         size_t	len;
 
-        mygetline(buf, BUFLEN, "Enter line (max 127 char) or 'CLOSE' to end: ");
+        mygetline(buf, BUFLEN, "Introdu text (maxim 127 de caractere) sau 'CLOSE' pentru a inchide: ");
 		len = strlen(buf);
 		if(writen(socket, buf, len) != len)
 		{
-			printf("Write error\n");
+			printf("Eroare la scriere\n");
 			break;
 		}	
 		printf("===========================================================\n");

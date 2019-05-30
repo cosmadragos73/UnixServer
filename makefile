@@ -30,8 +30,8 @@ client_tcp: $(SRC_CLIENT_TCP)
 client_udp: $(SRC_CLIENT_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
 		for f in $(EXE_CLIENT_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
 
-client_udp_tcp:$(SRC_CLIENT_TCP_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
-		for f in $(EXE_CLIENT_TCP_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+client_udp_tcp:$(SRC_CLIENT_TCP_UDP) 
+		for f in $(EXE_CLIENT_TCP_UDP); do (cc $(FLAGS) -o $$f $$f.c ); done
 
 
 server_tcp:$(SRC_SERVER_TCP) 
@@ -40,8 +40,8 @@ server_tcp:$(SRC_SERVER_TCP)
 server_udp:$(SRC_SERVER_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
 		for f in $(EXE_SERVER_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
 
-server_udp_tcp:$(SRC_SERVER_TCP_UDP) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
-		for f in $(EXE_SERVER_TCP_UDP); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done
+server_udp_tcp:$(SRC_SERVER_TCP_UDP) 
+		for f in $(EXE_SERVER_TCP_UDP); do (cc $(FLAGS) -o $$f $$f.c ); done
 
 #client: $(SRC_CLIENT) utils/socks.o utils/socks.h utils/errlib.o utils/errlib.h
 #		for f in $(EXE_CLIENT); do (cc $(FLAGS) -o $$f $$f.c utils/socks.o utils/errlib.o); done

@@ -98,13 +98,13 @@ int get_command(char *command){
 	while(check < 0){
     	char *str;
     	if(get_user_input(command) < 0){
-    		printf("Cannot Read Command...\nPlease Try Again...\n");
+            printf("Nu am putut citii comanda..\nIncearca din nou...\n");
             bzero(command, (int)sizeof(command));
     		continue;
     	}
 
         if(strlen(command) < 2){
-            printf("No Input Detected...\nPlease Try Again\n");
+            printf("Nu am detectat input...\n Incearca din nou...\n");
             bzero(command, (int)sizeof(command));
             continue;
         }
@@ -113,7 +113,7 @@ int get_command(char *command){
         strcpy(copy, command);
 
         if(check_command(copy) < 0){
-            	printf("Invalid Format...\nPlease Try Again...\n");
+            	printf("Formatul introdus nu este corect...\nIncearca din nou...\n");
             	bzero(command, (int)sizeof(command));
             	bzero(copy, (int)sizeof(copy));
             	continue;
@@ -132,7 +132,7 @@ int get_command(char *command){
             else if(strcmp(str, "put") == 0){value = 3;}
             else if(strcmp(str, "quit") == 0){value = 4;}
     	}else{
-    		printf("Incorrect Command Entered...\nPlease Try Again...\n");
+    		printf("Comanda introdusa nu este corecta...\n Incearca din nou...\n");
             bzero(command, strlen(command));
            	bzero(copy, sizeof(copy));
     		continue;
@@ -202,7 +202,7 @@ int do_ls(int controlfd, int datafd, char *input){
     int maxfdp1, data_finished = FALSE, control_finished = FALSE;
 
     if(get_filename(input, filelist) < 0){
-        printf("No Filelist Detected...\n");
+        printf("Nu am detectat niciun fisiere...\n");
         sprintf(str, "LIST");
     }else{
         sprintf(str, "LIST %s", filelist);
@@ -242,7 +242,7 @@ int do_ls(int controlfd, int datafd, char *input){
         }
 
         if(FD_ISSET(datafd, &rdset)){
-            printf("Server Data Response:\n");
+            printf("Server data(raspuns) :\n");
             while(read(datafd, recvline, MAXLINE) > 0){
                 printf("%s", recvline); 
                 bzero(recvline, (int)sizeof(recvline)); 
@@ -275,7 +275,7 @@ int do_get(int controlfd, int datafd, char *input){
     
 
     if(get_filename(input, filename) < 0){
-        printf("No filename Detected...\n");
+        printf("Nu am detectat numele fisierului...\n");
         char send[1024];
         sprintf(send, "SKIP");
         write(controlfd, send, strlen(send));
@@ -286,7 +286,7 @@ int do_get(int controlfd, int datafd, char *input){
     }else{
         sprintf(str, "RETR %s", filename);
     }   
-    printf("File: %s\n", filename);
+    printf("Fisierul: %s\n", filename);
     sprintf(temp1, "%s-out", filename);
     bzero(filename, (int)sizeof(filename));
 
@@ -305,7 +305,7 @@ int do_get(int controlfd, int datafd, char *input){
     
     FILE *fp;
     if((fp = fopen(temp1, "w")) == NULL){
-        perror("file error");
+        perror("eroare la fisier");
         return -1;
     }
 
@@ -318,10 +318,10 @@ int do_get(int controlfd, int datafd, char *input){
         if(FD_ISSET(controlfd, &rdset)){
             bzero(recvline, (int)sizeof(recvline));
             read(controlfd, recvline, MAXLINE);
-            printf("Server Control Response: %s\n", recvline);
+            printf("Raspuns de la server(control): %s\n", recvline);
             temp = strtok(recvline, " ");
             if(atoi(temp) != 200){
-                printf("File Error...\nExiting...\n");
+                printf("Eroare la fisier...\nIes...\n");
                 break;
             }
             control_finished = TRUE;
@@ -367,13 +367,13 @@ int do_put(int controlfd, int datafd, char *input){
     
 
     if(get_filename(input, filename) < 0){
-        printf("No filename Detected...\n");
+        printf("Nu am detectat fisierul...\n");
         char send[1024];
         sprintf(send, "SKIP");
         write(controlfd, send, strlen(send));
         bzero(send, (int)sizeof(send));
         read(controlfd, send, 1000);
-        printf("Server Control Response: %s\n", send);
+        printf("Raspuns de la server(control): %s\n", send);
         return -1;
     }else{
         sprintf(str, "STOR %s", filename);
@@ -400,7 +400,7 @@ int do_put(int controlfd, int datafd, char *input){
     extern FILE *popen();
 
     if (!(in = popen(temp1, "r"))) {
-        printf("Cannot Run Command\nExiting...\n");
+        printf("Nu am putut rula comanda \nIes...\n");
         return -1;
     }
 
@@ -414,10 +414,10 @@ int do_put(int controlfd, int datafd, char *input){
         if(FD_ISSET(controlfd, &rdset)){
             bzero(recvline, (int)sizeof(recvline));
             read(controlfd, recvline, MAXLINE);
-            printf("Server Control Response: %s\n", recvline);
+            printf("Raspuns de la server(control): %s\n", recvline);
             temp = strtok(recvline, " ");
             if(atoi(temp) != 200){
-                printf("File Error...\nExiting...\n");
+                printf("Eroare la fisier...\nIes...\n");
                 break;
             }
             control_finished = TRUE;
@@ -454,8 +454,8 @@ int main(int argc, char **argv){
 
 
 	if(argc != 3){
-		printf("Invalid Number of Arguments...\n");
-		printf("Usage: ./ftpclient <server-ip> <server-listen-port>\n");
+		printf("Arguments Argumentele trimise nu sunt corecte...\n");
+		printf("Folosire: ./Client <server-ip> <server-port>\n");
 		exit(-1);
 	}
 
@@ -464,7 +464,7 @@ int main(int argc, char **argv){
 
     //set up control connection--------------------------------------------------
     if ( (controlfd = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-    	perror("socket error");
+    	perror("Eroare la socket");
     	exit(-1);
     }
                 
@@ -472,12 +472,12 @@ int main(int argc, char **argv){
     servaddr.sin_family = AF_INET;
     servaddr.sin_port   = htons(server_port);
     if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0){
-    	perror("inet_pton error");
+    	perror("eroare la inet_pton");
     	exit(-1);
     }
         
     if (connect(controlfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0){
-    	perror("connect error");
+    	perror("eroare la conectare");
     	exit(-1);
     }
 
@@ -518,10 +518,10 @@ int main(int argc, char **argv){
             write(controlfd, quit, strlen(quit));
             bzero(quit, (int)sizeof(quit));
             read(controlfd,quit, 1024);
-            printf("Server Response: %s\n", quit);
+            printf("Raspuns de la server: %s\n", quit);
             break;
         }
-        printf("command: %s\n", command);
+        printf("comanda: %s\n", command);
 
         //send PORT n1,n2,n3,n4,n5,n6
         bzero(str, (int)sizeof(str));
@@ -531,7 +531,7 @@ int main(int argc, char **argv){
         bzero(str, (int)sizeof(str));
         datafd = accept(listenfd, (struct sockaddr*)NULL, NULL);
 
-        printf("Data connection Established...\n");
+        printf(" Conexiunea de date a fost stabilita...\n");
 
         if(code == 1){
             if(do_ls(controlfd, datafd, command) < 0){
